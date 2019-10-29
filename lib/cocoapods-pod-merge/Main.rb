@@ -23,6 +23,12 @@ MergeFileSample = %(
   end
 )
 PodSpecWriter_Hook = %(
+  pre_install do |installer|
+    installer.analysis_result.specifications.each do |specs|
+      specs.swift_version = '4.2'
+    end
+  end
+
   post_install do |context|
     FileUtils.mkdir('Podspecs')
     context.aggregate_targets[0].specs.each do |spec|
