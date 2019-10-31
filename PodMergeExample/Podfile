@@ -11,4 +11,5 @@ target 'PodMergeExample' do
   pod 'Networking', :path => 'MergedPods/Networking'
   pod 'UI', :path => 'MergedPods/UI'
   pod 'MergedSwiftPods', :path => 'MergedPods/MergedSwiftPods'
+  pod 'SwiftUtilPods', :path => 'MergedPods/SwiftUtilPods'
 end

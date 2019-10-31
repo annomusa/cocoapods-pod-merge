@@ -23,12 +23,6 @@ MergeFileSample = %(
   end
 )
 PodSpecWriter_Hook = %(
-  pre_install do |installer|
-    installer.analysis_result.specifications.each do |specs|
-      specs.swift_version = '4.2'
-    end
-  end
-
   post_install do |context|
     FileUtils.mkdir('Podspecs')
     context.aggregate_targets[0].specs.each do |spec|
@@ -148,7 +142,12 @@ module CocoapodsPodMerge
             if line.strip == 'end'
               parsing_a_group = false
             elsif line.strip.include?('!')
-              merge_groups[group_name]['flags'][line.strip.delete('!')] = true
+              flag = line.strip.delete('!').split(" ")
+              if flag.count() > 1
+                merge_groups[group_name]['flags'][flag.first()] = flag.last()
+              else
+                merge_groups[group_name]['flags'][flag.first()] = true
+              end
             else
               merge_groups[group_name]['lines'].append(line)
               line = line.split(',').first
@@ -206,7 +205,7 @@ module CocoapodsPodMerge
       Pod::UI.puts 'Downloading Pods in the group'.cyan
       FileUtils.mkdir CacheDirectory unless File.directory?(CacheDirectory)
 
-      create_cache_podfile(podfile_info, group_contents['lines'])
+      create_cache_podfile(podfile_info, group_contents)
 
       Dir.chdir(CacheDirectory) do
         system('pod install') || raise('Failed to download pods to merge')
@@ -404,15 +403,29 @@ module CocoapodsPodMerge
       end
       file.puts("install! 'cocoapods', :integrate_targets => false, :lock_pod_sources => false")
       file.puts("target 'Dummy' do")
-      pods.each do |line|
+      pods['lines'].each do |line|
         file.puts line.to_s
       end
     rescue IOError => e
-      Pod::UI.puts "Error Writing Podfile for group #{pods}: #{e}".red
+      Pod::UI.puts "Error Writing Podfile for group #{pods['lines']}: #{e}".red
     ensure
       file.puts 'end'
+      file.puts pre_install_template(pods['flags'])
       file.puts PodSpecWriter_Hook
       file&.close
+    end
+
+    def pre_install_template(pods)
+      return if pods.empty?
+      swift_version = pods['swift_version']
+      hook = %(
+        pre_install do |installer|
+          installer.analysis_result.specifications.each do |specs|
+            specs.swift_version = #{swift_version}
+          end
+        end
+      )
+      hook
     end
 
     def generate_module_map(merged_framework_name, public_headers)

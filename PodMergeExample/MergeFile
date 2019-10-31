@@ -1,3 +1,8 @@
+group 'SwiftUtilPods' do
+	swift_version! '4.2'
+	pod 'DeviceGuru', '4.0.0'
+end
+
 group 'Networking'
 	pod 'AFNetworking', '2.7.0'
 	pod 'SDWebImage', '~> 5.0'

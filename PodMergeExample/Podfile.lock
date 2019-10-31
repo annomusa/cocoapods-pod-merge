@@ -8,16 +8,18 @@ PODS:
     - Result (~> 4.1)
   - Networking (1.0.0)
   - Result (4.1.0)
+  - SwiftUtilPods (1.0.0)
   - UI (1.0.0)
 
 DEPENDENCIES:
   - MergedSwiftPods (from `MergedPods/MergedSwiftPods`)
   - Moya
   - Networking (from `MergedPods/Networking`)
+  - SwiftUtilPods (from `MergedPods/SwiftUtilPods`)
   - UI (from `MergedPods/UI`)
 
 SPEC REPOS:
-  https://cdn.cocoapods.org/:
+  trunk:
     - Alamofire
     - Moya
     - Result
@@ -27,6 +29,8 @@ EXTERNAL SOURCES:
     :path: MergedPods/MergedSwiftPods
   Networking:
     :path: MergedPods/Networking
+  SwiftUtilPods:
+    :path: MergedPods/SwiftUtilPods
   UI:
     :path: MergedPods/UI
 
@@ -36,8 +40,9 @@ SPEC CHECKSUMS:
   Moya: f4a4b80ff2f8a4ffc208dfb31cd91636622fee6e
   Networking: 844633d13d2328a829083b24ffaee99aea51c1de
   Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
+  SwiftUtilPods: 1415e0806030fbf5f2e8ef285b97ee1afb0ef1c9
   UI: 2aa82721ee430cd2f0ab314904bbe1a281fa2ff9
 
-PODFILE CHECKSUM: c99f0371dd5beae99026b9810a6f7d431cee616b
+PODFILE CHECKSUM: 358eef7190835a26ce287a30aaedfa21a388025c
 
 COCOAPODS: 1.8.1
