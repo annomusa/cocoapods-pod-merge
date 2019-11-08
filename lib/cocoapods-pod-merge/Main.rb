@@ -7,6 +7,7 @@ require 'cocoapods'
 require 'fileutils'
 require 'json'
 require 'digest/md5'
+require 'pry'
 
 CacheDirectory = 'MergeCache'
 InstallationDirectory = 'MergedPods'
@@ -143,11 +144,14 @@ module CocoapodsPodMerge
               parsing_a_group = false
             elsif line.strip.include?('!')
               flag = line.strip.delete('!').split(" ")
+              # binding.pry
               if flag.count() > 1
                 merge_groups[group_name]['flags'][flag.first()] = flag.last()
               else
                 merge_groups[group_name]['flags'][flag.first()] = true
               end
+
+              Pod::UI.puts "Flag found: #{merge_groups[group_name]['flags'][flag.first()]}"
             else
               merge_groups[group_name]['lines'].append(line)
               line = line.split(',').first
@@ -200,7 +204,7 @@ module CocoapodsPodMerge
           has_dependencies = true
         end
       end
-
+      # binding.pry
       # Download the Pods to be merged
       Pod::UI.puts 'Downloading Pods in the group'.cyan
       FileUtils.mkdir CacheDirectory unless File.directory?(CacheDirectory)
@@ -395,6 +399,7 @@ module CocoapodsPodMerge
       FileUtils.touch("#{CacheDirectory}/Podfile")
       file = File.new("#{CacheDirectory}/Podfile", 'w')
       file.puts("require 'json'")
+      binding.pry
       podfile_info.sources.each do |source|
         file.puts source
       end
@@ -417,6 +422,7 @@ module CocoapodsPodMerge
 
     def pre_install_template(pods)
       return if pods.empty?
+      binding.pry
       swift_version = pods['swift_version']
       hook = %(
         pre_install do |installer|
